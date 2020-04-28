@@ -1,0 +1,77 @@
+import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:numbertrivia/core/utils/InputConverter.dart';
+import 'package:numbertrivia/number_trivia/domain/entities/NumberTrivia.dart';
+import 'package:numbertrivia/number_trivia/domain/use_cases/GetConcreteNumberTrivia.dart';
+import 'package:numbertrivia/number_trivia/domain/use_cases/GetRandomNumberTrivia.dart';
+import 'package:numbertrivia/number_trivia/presentation/bloc/bloc_bloc.dart';
+
+class MockGetConcreteNumberTrivia extends Mock
+    implements GetConcreteNumberTrivia {}
+
+class MockGetRandomNumberTrivia extends Mock implements GetRandomNumberTrivia {}
+
+class MockInputConverter extends Mock implements InputConverter {}
+
+void main() {
+  BloC bloc;
+  MockGetConcreteNumberTrivia mockGetConcreteNumberTrivia;
+  MockGetRandomNumberTrivia mockGetRandomNumberTrivia;
+  MockInputConverter mockInputConverter;
+
+  setUp(() {
+    mockGetConcreteNumberTrivia = MockGetConcreteNumberTrivia();
+    mockGetRandomNumberTrivia = MockGetRandomNumberTrivia();
+    mockInputConverter = MockInputConverter();
+
+    bloc = BloC(
+      concrete: mockGetConcreteNumberTrivia,
+      random: mockGetRandomNumberTrivia,
+      inputConverter: mockInputConverter,
+    );
+  });
+
+  test('initial state should be Empty', () {
+    // Assert
+    expect(bloc.initialState, equals(Empty()));
+  });
+
+  group('GetTriviaForConcreteNumber', () {
+    final tNumberString = "1";
+    final tNumberParsed = 1;
+
+    final tNumberTrivia = NumberTrivia(number: 1, text: 'Test trivia');
+
+    test('should call the InputConverter to validate and convert input',
+        () async {
+      // Arrange
+      when(mockInputConverter.stringToUnsignedInteger(any))
+          .thenReturn(Right(tNumberParsed));
+      // Act
+      bloc.add(GetTriviaFromConcreteNumber(tNumberString));
+      await untilCalled(mockInputConverter.stringToUnsignedInteger(any));
+      // Assert
+      verify(mockInputConverter.stringToUnsignedInteger(tNumberString));
+    });
+
+    test(
+      'should emit [Error] when the input is invalid',
+          () async {
+        // arrange
+        when(mockInputConverter.stringToUnsignedInteger(any))
+            .thenReturn(Left(InvalidInputFailure()));
+        // assert later
+        final expected = [
+          Empty(),
+          Error(message: INVALID_INPUT_FAILURE_MESSAGE),
+        ];
+        expectLater(bloc, emitsInOrder(expected));
+        // act
+        bloc.add(GetTriviaFromConcreteNumber(tNumberString));
+      },
+    );
+    
+    test('should get data from the use case when the input is valid', body)
+  });
+}
