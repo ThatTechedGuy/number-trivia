@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:numbertrivia/core/error/exceptions.dart';
@@ -47,6 +46,22 @@ void main() {
       // Assert
       // A CacheException is expected to be thrown on call.
       expect(() => call(), throwsA(isA<CacheException>()));
+    });
+  });
+
+  group('cacheNumberTrivia', () {
+    test('should call SharedPrefernces to cache the data', () async {
+      final tNumberTriviaModel =
+          NumberTriviaModel(number: 1, text: 'Test trivia');
+      // Arrange
+      // No arrangements as we cannot control the SharedPreferences from a unit test.
+
+      // Act
+      dataSource.cacheNumberTrivia(tNumberTriviaModel);
+      // Assert
+      final expectedJSONString = jsonEncode(tNumberTriviaModel.toJSON());
+      verify(mockSharedPreferences.setString(
+          CACHED_NUMBER_TRIVIA, expectedJSONString));
     });
   });
 }
