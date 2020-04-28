@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:numbertrivia/core/error/failures.dart';
+import 'package:numbertrivia/core/usecases/usecase.dart';
 import 'package:numbertrivia/core/utils/InputConverter.dart';
 import 'package:numbertrivia/number_trivia/domain/entities/NumberTrivia.dart';
 import 'package:numbertrivia/number_trivia/domain/use_cases/GetConcreteNumberTrivia.dart';
@@ -61,6 +62,14 @@ class BloC extends Bloc<BlocEvent, BlocState> {
             (trivia) => Loaded(numberTrivia: trivia),
           );
         },
+      );
+    }
+    if (event is GetTriviaFromRandomNumber) {
+      yield Loading();
+      final failureOrTrivia = await getRandomNumberTrivia(NoParams());
+      yield failureOrTrivia.fold(
+        (failure) => Error(message: appropriateErrorMessage(failure)),
+        (trivia) => Loaded(numberTrivia: trivia),
       );
     }
   }
