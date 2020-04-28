@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:numbertrivia/core/error/failures.dart';
 import 'package:numbertrivia/core/utils/InputConverter.dart';
 import 'package:numbertrivia/number_trivia/domain/entities/NumberTrivia.dart';
 import 'package:numbertrivia/number_trivia/domain/use_cases/GetConcreteNumberTrivia.dart';
@@ -16,6 +17,7 @@ const String SERVER_FAILURE_MESSAGE = 'Server failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache failure';
 const String INVALID_INPUT_FAILURE_MESSAGE =
     'Invalid Input - The number must be a positive or zero.';
+const String UNKNOWN_FAILURE_MESSAGE = 'Something went wrong';
 
 class BloC extends Bloc<BlocEvent, BlocState> {
   final GetConcreteNumberTrivia getConcreteNumberTrivia;
@@ -50,8 +52,29 @@ class BloC extends Bloc<BlocEvent, BlocState> {
         },
         // Although the "success case" doesn't interest us with the current test,
         // we still have to handle it somehow.
-        (integer) => throw UnimplementedError(),
+        (integer) async* {
+          yield Loading();
+          final failureOrTrivia =
+              await getConcreteNumberTrivia(Params(number: integer));
+          yield failureOrTrivia.fold(
+            (failure) => Error(message: appropriateErrorMessage(failure)),
+            (trivia) => Loaded(numberTrivia: trivia),
+          );
+        },
       );
+    }
+  }
+
+  String appropriateErrorMessage(Failure failure) {
+    switch (failure.runtimeType) {
+      case ServerFailure:
+        return SERVER_FAILURE_MESSAGE;
+        break;
+      case CacheFailure:
+        return CACHE_FAILURE_MESSAGE;
+        break;
+      default: // Unknown failures
+        return UNKNOWN_FAILURE_MESSAGE;
     }
   }
 }
