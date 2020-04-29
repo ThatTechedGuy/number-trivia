@@ -30,15 +30,19 @@ class NumberTriviaScreen extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(10.0)
+                                color: Colors.black12,
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Text(
+                              'NUMBER TRIVIA',
+                              style: TextStyle(
+                                color: Theme.of(context).accentColor,
+                                fontWeight: FontWeight.w200,
+                                fontSize: 55,
+                              ),
                             ),
-                            child: Text('NUMBER TRIVIA', style: TextStyle(
-                              color: Theme.of(context).accentColor,
-                              fontWeight: FontWeight.w200,
-                              fontSize: 55,
-                            ),),
                           ),
+                          SizedBox(height: 10.0),
+
                           // Top half
                           Expanded(
                             child: BlocBuilder<BloC, BlocState>(
@@ -46,7 +50,8 @@ class NumberTriviaScreen extends StatelessWidget {
                                 if (state is Empty) {
                                   return MessageDisplay(
                                     isError: false,
-                                    message: 'NUMBER TRIVIA',
+                                    message:
+                                        'Either type in a number or search for a random trivia!',
                                   );
                                 } else if (state is Loading) {
                                   return LoadingWidget();

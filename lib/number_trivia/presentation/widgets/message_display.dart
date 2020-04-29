@@ -14,13 +14,18 @@ class MessageDisplay extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 25,
-                  color: isError ? Colors.red : Theme.of(context).accentColor,
-                  fontWeight: isError ? FontWeight.w700 : FontWeight.w200),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Text(
+                message,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 25,
+                    color: isError ? Colors.red : Theme.of(context).accentColor,
+                    fontWeight: isError ? FontWeight.w700 : FontWeight.w200),
+              ),
             ),
             TriviaAnimation(animationName: 'searchingAnimation.json')
           ],
