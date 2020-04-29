@@ -1,5 +1,7 @@
 part of 'bloc_bloc.dart';
 
+const CONSTANT = 1;
+
 abstract class BlocEvent extends Equatable {
   const BlocEvent();
 }

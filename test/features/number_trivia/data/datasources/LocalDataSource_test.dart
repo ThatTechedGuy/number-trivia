@@ -30,7 +30,7 @@ void main() {
       when(mockSharedPreferences.getString(any))
           .thenReturn(fixture('triviaCached.json'));
       // Act
-      final result = await dataSource.getLastNumberTrivia();
+      await dataSource.getLastNumberTrivia();
       // Assert
       verify(mockSharedPreferences.getString(CACHED_NUMBER_TRIVIA));
     });
