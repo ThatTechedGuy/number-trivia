@@ -12,6 +12,11 @@ class NumberTriviaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.dark().copyWith(
+        primaryColor: Color(0xFF344955),
+        scaffoldBackgroundColor: Color(0xFF232F34),
+        accentColor: Color(0xFFF9AA33)
+      ),
       title: 'Number Trivia',
       home: NumberTriviaScreen(),
     );

@@ -8,26 +8,32 @@ class TriviaDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height / 3,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            numberTrivia.number.toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 50,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              numberTrivia.number.toString(),
+              style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 80,
+                  color: Theme.of(context).accentColor),
             ),
           ),
-          Expanded(
-            child: Center(
-              child: SingleChildScrollView(
-                child: Text(
-                  numberTrivia.text,
-                  style: TextStyle(
-                    fontSize: 25,
-                  ),
-                ),
-              ),
+          Container(
+            padding: EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Text(
+              numberTrivia.text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey[350],
+                  fontWeight: FontWeight.w300),
             ),
           ),
         ],

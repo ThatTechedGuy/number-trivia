@@ -5,50 +5,58 @@ import 'package:numbertrivia/number_trivia/domain/entities/NumberTrivia.dart';
 import 'package:numbertrivia/number_trivia/presentation/bloc/bloc_bloc.dart';
 import 'package:numbertrivia/number_trivia/presentation/widgets/loading_widget.dart';
 import 'package:numbertrivia/number_trivia/presentation/widgets/message_display.dart';
+import 'package:numbertrivia/number_trivia/presentation/widgets/triviaAnimation.dart';
 import 'package:numbertrivia/number_trivia/presentation/widgets/trivia_display.dart';
 
 class NumberTriviaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Number Trivia'),
-      ),
-      body: BlocProvider(
-        create: (_) => sl<BloC>(),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 10.0),
-                // Top half
-                BlocBuilder<BloC, BlocState>(
-                  builder: (context, state) {
-                    if (state is Empty) {
-                      return MessageDisplay(
-                        message: 'Start searching',
-                      );
-                    } else if (state is Loading) {
-                      return LoadingWidget();
-                    } else if (state is Loaded) {
-                      return TriviaDisplay(
-                        numberTrivia: state.numberTrivia,
-                      );
-                    } else if (state is Error) {
-                      return MessageDisplay(
-                        message: state.message,
-                      );
-                    }
-                  },
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
                 ),
-                SizedBox(height: 20),
-                // Bottom half
-                TriviaControls()
-              ],
-            ),
-          ),
-        ),
+                child: IntrinsicHeight(
+                  child: BlocProvider(
+                    create: (_) => sl<BloC>(),
+                    child: Column(
+                      children: <Widget>[
+                        TriviaAnimation(
+                          animationName: 'infinityColor.json',
+                        ),
+                        // Top half
+                        Expanded(
+                          child: BlocBuilder<BloC, BlocState>(
+                            builder: (context, state) {
+                              if (state is Empty) {
+                                return MessageDisplay(
+                                  message: 'NUMBER TRIVIA',
+                                );
+                              } else if (state is Loading) {
+                                return LoadingWidget();
+                              } else if (state is Loaded) {
+                                return TriviaDisplay(
+                                  numberTrivia: state.numberTrivia,
+                                );
+                              } else if (state is Error) {
+                                return MessageDisplay(
+                                  message: state.message,
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                        // Bottom half
+                        TriviaControls()
+                      ],
+                    ),
+                  ),
+                )),
+          );
+        },
       ),
     );
   }
@@ -83,7 +91,7 @@ class _TriviaControlsState extends State<TriviaControls> {
               inputString = value;
             });
           },
-          onSubmitted: (_){
+          onSubmitted: (_) {
             addConcreteEvent();
           },
         ),

@@ -23,7 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  #Animations
+  lottie: ^0.3.3
   # Service locator
   get_it: ^4.0.1
   # Bloc for state management
@@ -64,6 +65,12 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/animations/ideaAnimation.json
+    - assets/animations/infinityColor.json
+    - assets/animations/loadingAnimation.json
+    - assets/animations/searchingAnimation.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:
