@@ -3,8 +3,9 @@ import 'package:numbertrivia/number_trivia/presentation/widgets/triviaAnimation.
 
 class MessageDisplay extends StatelessWidget {
   final String message;
+  final bool isError;
 
-  const MessageDisplay({@required this.message});
+  const MessageDisplay({@required this.message, @required this.isError});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +18,9 @@ class MessageDisplay extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 55,
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.w200
-              ),
+                  fontSize: 25,
+                  color: isError ? Colors.red : Theme.of(context).accentColor,
+                  fontWeight: isError ? FontWeight.w700 : FontWeight.w200),
             ),
             TriviaAnimation(animationName: 'searchingAnimation.json')
           ],

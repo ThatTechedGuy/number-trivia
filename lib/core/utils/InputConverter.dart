@@ -9,11 +9,15 @@ class InputConverter {
   /// Returns an [InvalidInputFailure] on invalid inputs or internal failures.
   Either<Failure, int> stringToUnsignedInteger(String str) {
     try {
-      final integer = int.parse(str);
-      if (integer.isNegative)
+      if (str.isEmpty) {
         throw FormatException();
-      else
-        return Right(integer);
+      } else {
+        final integer = int.parse(str);
+        if (integer.isNegative)
+          throw FormatException();
+        else
+          return Right(integer);
+      }
     } on FormatException {
       return Left(InvalidInputFailure());
     }
